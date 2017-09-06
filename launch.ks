@@ -1,4 +1,4 @@
-parameter orbit.
+parameter orbit is 100000, deploysolar is true, deployantenna is true.
 
 // altitude to start gravity turn
 set turn_start to orbit / 10.
@@ -14,7 +14,33 @@ function acceleration {
 	return ship:availablethrust / ship:mass.
 }
 
+// deploy when in space
+when altitude >= 75000 then {
+	if deploysolar {
+		print "Deploying solar panels".
+		panels on.
+	}
+
+	if deployantenna {
+		for a in ship:modulesnamed("ModuleRTAntenna") {
+			if a:hasevent("activate") {
+				if a:hasfield("dish range") {
+					a:doevent("activate").
+					print "Activated dish antenna " + a:part:title.
+				}
+
+				if a:hasfield("omni range") {
+					a:doevent("activate").
+					print "Activated omni antenna " + a:part:title.
+				}
+			}
+		}
+	}
+}
+
 print "Launching to orbit at " + round(orbit) + "m".
+lock throttle to 1.
+lock steering to up.
 
 // automatically stage when no thrust available
 when ship:availablethrust = 0 then {
@@ -29,13 +55,12 @@ when ship:availablethrust = 0 then {
 
 // burn to gravity turn start
 print "Waiting until " + round(turn_start) + "m to begin gravity turn".
-lock throttle to 1.
-lock steering to up.
 wait until altitude >= turn_start.
 
 // gravity turn while raising apoapsis
+set turn_ap to apoapsis.
 print "Beginning gravity turn at " + round(altitude) + "m".
-lock steering to up + R(0, -(apoapsis - turn_start) / (orbit - turn_start) * 75, 0).
+lock steering to up + R(0, -(apoapsis - turn_ap) / (orbit - turn_ap) * 75, 0).
 wait until apoapsis >= orbit.
 
 print "Coasting to start of circularization burn".

@@ -1,24 +1,20 @@
 clearscreen.
 
+set ship:control:pilotmainthrottle to 0.
 sas off.
 lock steering to up.
 
-print "Copying launch and deploy scripts".
+print "Copying launch script".
 copypath("0:launch", "launch").
-copypath("0:deploy", "deploy").
 
 print "Waiting 5 seconds to stabilize before launching".
 wait 5.
 
-print "Executing launch script for 100km".
-print "-----".
-
-runpath("launch", 100_000).
-
-print "Executing deploy script".
-print "-----".
-
-runpath("deploy").
+print "----- Executing launch script for 100km".
+runpath("launch", 100_000, true, true).
+print "----- Launch script completed".
 
 print "Removing boot script".
 deletepath("boot/lko").
+
+print "Launch sequence completed".
