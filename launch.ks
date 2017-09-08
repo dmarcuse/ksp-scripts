@@ -39,6 +39,7 @@ when altitude >= 75000 then {
 }
 
 print "Launching to orbit at " + round(orbit) + "m".
+set ship:control:pilotmainthrottle to 0.
 lock throttle to 1.
 lock steering to up.
 
