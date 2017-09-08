@@ -6,7 +6,7 @@ set turn_start to orbit / 10.
 // gets the orbital speed of an orbit at a given height around a given body
 function orbital_speed {
 	parameter h, body is ship:orbit:body.
-	return sqrt((constant:g * body:mass) / (h + (body:radius))).
+	return sqrt(body:mu / (h + (body:radius))).
 }
 
 // gets the current acceleration of this ship
@@ -43,14 +43,10 @@ lock throttle to 1.
 lock steering to up.
 
 // automatically stage when no thrust available
-when ship:availablethrust = 0 then {
+when ship:availablethrust = 0 and stage:ready then {
 	stage.
 	print "Stage " + stage:number + " activated".
-	wait until stage:ready.
-
-	if stage:number > 0 {
-		preserve.
-	}
+	preserve.
 }
 
 // burn to gravity turn start
