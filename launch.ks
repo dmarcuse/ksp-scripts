@@ -39,7 +39,9 @@ when altitude >= 75000 then {
 }
 
 print "Launching to orbit at " + round(orbit) + "m".
+
 set ship:control:pilotmainthrottle to 0.
+sas off.
 lock throttle to 1.
 lock steering to up.
 
@@ -47,7 +49,10 @@ lock steering to up.
 when ship:availablethrust = 0 and stage:ready then {
 	stage.
 	print "Stage " + stage:number + " activated".
-	preserve.
+
+	if stage:number > 0 {
+		preserve.
+	}
 }
 
 // burn to gravity turn start
@@ -72,6 +77,7 @@ lock steering to ap_vel.
 print "Projected burn: Δv = " + round(v_diff) + "m/s, duration = " + round(burn_time) + "s".
 wait until eta:apoapsis <= burn_time / 2.
 
+kuniverse:timewarp:cancelwarp().
 print "Beginning circularization burn".
 
 set pid to pidloop(-0.01, 0, -0.006).
@@ -95,3 +101,4 @@ print "Launch completed".
 unlock throttle.
 unlock steering.
 sas on.
+set ship:control:pilotmainthrottle to 0.

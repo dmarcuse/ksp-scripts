@@ -10,6 +10,7 @@ if alt:radar > begin {
 	wait until alt:radar <= begin.
 }
 
+kuniverse:timewarp:cancelwarp().
 print "Beginning powered landing".
 
 when alt:radar <= 300 then {
@@ -17,12 +18,19 @@ when alt:radar <= 300 then {
 	gear on.
 }
 
-set pid to pidloop(0.01, 0, 0.1).
-set pid:setpoint to -1.
+set pid to pidloop(-0.1, 0, -0.006).
+set pid:setpoint to 3.
 set pid:minoutput to 0.
 set pid:maxoutput to 1.
 
-lock throttle to pid:update(time:seconds, alt:radar).
+function upd {
+	set throt to pid:update(time:seconds, ship:orbit:velocity:surface:mag()).
+	print "V " + ship:orbit:velocity:surface:mag() at (0, 15).
+	print "T " + throt at (0, 16).
+	return throt.
+}
+
+lock throttle to upd().
 
 wait until ship:status = "landed" or ship:status = "splashed".
 print "Landing complete".

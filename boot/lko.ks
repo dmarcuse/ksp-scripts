@@ -1,9 +1,5 @@
 clearscreen.
 
-set ship:control:pilotmainthrottle to 0.
-sas off.
-lock steering to up.
-
 print "Copying launch script".
 copypath("0:launch", "launch").
 
