@@ -1,7 +1,7 @@
 parameter orbit is 100000, deploysolar is true, deployantenna is true.
 
 // altitude to start gravity turn
-set turn_start to orbit / 10.
+set turn_start to orbit / 20.
 
 // gets the orbital speed of an orbit at a given height around a given body
 function orbital_speed {
@@ -42,6 +42,9 @@ print "Launching to orbit at " + round(orbit) + "m".
 
 set ship:control:pilotmainthrottle to 0.
 sas off.
+
+wait 0.1.
+
 lock throttle to 1.
 lock steering to up.
 
@@ -100,5 +103,6 @@ wait until v_diff <= 1.
 print "Launch completed".
 unlock throttle.
 unlock steering.
+
 sas on.
 set ship:control:pilotmainthrottle to 0.
