@@ -1,4 +1,4 @@
-parameter orbit is 100000, deploysolar is true, deployantenna is true.
+parameter orbit is 100000, deploysolar is true, deployantenna is true, deployfairing is true, inc is 0.
 
 // altitude to start gravity turn
 set turn_start to orbit / 20.
@@ -36,6 +36,15 @@ when altitude >= 75000 then {
 			}
 		}
 	}
+
+	if deployfairing {
+		for f in ship:modulesnamed("ModuleProceduralFairing") {
+			if f:hasevent("deploy") {
+				f:doevent("deploy").
+				print "Deployed fairing " + f:part:title.
+			}
+		}
+	}
 }
 
 print "Launching to orbit at " + round(orbit) + "m".
@@ -51,6 +60,7 @@ lock steering to up.
 // automatically stage when no thrust available
 when ship:availablethrust = 0 and stage:ready then {
 	stage.
+	steeringmanager:resetpids().
 	print "Stage " + stage:number + " activated".
 
 	if stage:number > 0 {
@@ -65,7 +75,9 @@ wait until altitude >= turn_start.
 // gravity turn while raising apoapsis
 set turn_ap to apoapsis.
 print "Beginning gravity turn at " + round(altitude) + "m".
-lock steering to up + R(0, -(apoapsis - turn_ap) / (orbit - turn_ap) * 75, 0).
+
+lock pitch to 90 - ((apoapsis - turn_ap) / (orbit - turn_ap) * 75).
+lock steering to HEADING(mod(inc + 90, 360), pitch).
 wait until apoapsis >= orbit.
 
 print "Coasting to start of circularization burn".

@@ -12,14 +12,10 @@ until not hasnode {
 	lock steering to dv.
 	
 	if warp {
-		lock pd to dv:direction:pitch - ship:facing:pitch.
-		lock yd to dv:direction:yaw - ship:facing:yaw.
-
-		lock pa to pd > -0.5 and pd < 1.5.
-		lock ya to yd > -0.5 and yd < 0.5.
-
+		wait 0.2.
 		print "Aligning before warping...".
-		wait until pa and yd.
+		wait until steeringmanager:angleerror < 0.5.
+
 		print "Aligned, beginning warp".
 		kuniverse:timewarp:warpto(time:seconds + nextnode:eta - 10 - burn / 2).
 	}
@@ -35,13 +31,19 @@ until not hasnode {
 
 	local pid is pidloop(-0.01, 0, -0.006).
 	set pid:setpoint to 0.
-	set pid:minoutput to 0.01.
+	set pid:minoutput to 0.05.
 	set pid:maxoutput to 1.
 
 	lock throttle to pid:update(time:seconds, dv:mag()).
 
 	wait until dv:mag() <= precision.
 	print "Burn completed".
+
+	unlock steering.
+	unlock dv.
+	unlock burn.
+	unlock throttle.
+
 	remove nextnode.
 }
 

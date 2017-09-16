@@ -7,7 +7,7 @@ print "Waiting 5 seconds to stabilize before launching".
 wait 5.
 
 print "----- Executing launch script for 100km".
-runpath("surface/launch", 100_000, true, true).
+runpath("surface/launch", 100_000, true, true, true, 0).
 print "----- Launch script completed".
 
 print "Removing boot script".
