@@ -14,7 +14,7 @@ until not hasnode {
 	if warp {
 		wait 0.2.
 		print "Aligning before warping...".
-		wait until steeringmanager:angleerror < 0.5.
+		wait until steeringmanager:pitcherror < 0.5 and steeringmanager:yawerror < 0.5.
 
 		print "Aligned, beginning warp".
 		kuniverse:timewarp:warpto(time:seconds + nextnode:eta - 10 - burn / 2).

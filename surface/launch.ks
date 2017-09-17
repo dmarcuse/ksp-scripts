@@ -97,7 +97,7 @@ print "Beginning circularization burn".
 
 set pid to pidloop(-0.01, 0, -0.006).
 set pid:setpoint to 0.
-set pid:minoutput to 0.01.
+set pid:minoutput to 0.05.
 set pid:maxoutput to 1.
 
 //function upd {
