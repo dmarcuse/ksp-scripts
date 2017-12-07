@@ -21,7 +21,7 @@ for module in sciparts {
 			if event:contains(keyword) {
 				print event.
 
-				if (not dryrun) {
+				if (not dryrun and module:hasevent(event)) {
 					module:doevent(event).
 				}
 			}

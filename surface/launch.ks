@@ -16,6 +16,15 @@ function acceleration {
 
 // deploy when in space
 when altitude >= 75000 then {
+	if deployfairing {
+		for f in ship:modulesnamed("ModuleProceduralFairing") {
+			if f:hasevent("deploy") {
+				f:doevent("deploy").
+				print "Deployed fairing " + f:part:title.
+			}
+		}
+	}
+
 	if deploysolar {
 		print "Deploying solar panels".
 		panels on.
@@ -33,15 +42,6 @@ when altitude >= 75000 then {
 					a:doevent("activate").
 					print "Activated omni antenna " + a:part:title.
 				}
-			}
-		}
-	}
-
-	if deployfairing {
-		for f in ship:modulesnamed("ModuleProceduralFairing") {
-			if f:hasevent("deploy") {
-				f:doevent("deploy").
-				print "Deployed fairing " + f:part:title.
 			}
 		}
 	}
@@ -110,7 +110,7 @@ set pid:maxoutput to 1.
 //lock throttle to upd().
 
 lock throttle to pid:update(time:seconds, v_diff).
-wait until v_diff <= 1.
+wait until v_diff <= 2.
 
 print "Launch completed".
 unlock throttle.
