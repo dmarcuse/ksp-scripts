@@ -41,6 +41,7 @@ declare function startgui {
 		}.
 	}
 
+	// Add content panes
 	declare local addpane is createswitcher(window).
 
 	addpane("Science", sciencepane@).

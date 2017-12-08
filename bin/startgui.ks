@@ -1,3 +1,5 @@
+// starts the assistant GUI
+
 runoncepath("/lib/gui/main").
 
 clearguis().

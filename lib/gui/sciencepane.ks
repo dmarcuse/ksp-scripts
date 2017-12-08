@@ -6,6 +6,6 @@ declare function sciencepane {
 
 	declare local runexps is box:addbutton("Run experiments now").
 	set runexps:onclick to {
-		notify("Ran " + runallexperiments() + " experiments.").
+		notify("Ran " + runallexperiments() + " experiment(s).").
 	}.
 }

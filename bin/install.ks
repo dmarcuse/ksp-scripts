@@ -1,4 +1,6 @@
-// installs all code from the archive, compiling .ks files and copying .ksm files
+// installs all code from the archive, optionally compiling .ks files and copying .ksm files
+
+declare parameter keepsource is false.
 
 declare function installdir {
 	declare parameter basepath is "/".
@@ -12,9 +14,14 @@ declare function installdir {
 		declare local fpath is basepath + item:name.
 		if item:isfile {
 			if item:extension = "ks" {
-				print "Compiling " + fpath.
 				set installed to installed + 1.
-				compile fpath to "1:" + fpath + "m".
+				if keepsource {
+					print "Copying " + fpath.
+					copypath(fpath, "1:" + fpath).
+				} else {
+					print "Compiling " + fpath.
+					compile fpath to "1:" + fpath + "m".
+				}
 			} else if item:extension = "ksm" {
 				print "Copying " + fpath.
 				set installed to installed + 1.
