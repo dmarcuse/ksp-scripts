@@ -1,10 +1,11 @@
-runoncepath("/lib/notify").
+runoncepath("/lib/utils").
 runoncepath("/lib/gui/contentswitcher").
 runoncepath("/lib/gui/sciencepane").
 runoncepath("/lib/gui/systempane").
+runoncepath("/lib/gui/nodepane").
 
 declare function startgui {
-	declare local window is gui(200).
+	declare local window is gui(300).
 	declare local stopped is false.
 
 	// Create header
@@ -42,13 +43,20 @@ declare function startgui {
 	}
 
 	// Add content panes
-	declare local addpane is createswitcher(window).
+	declare local callbacks is list().
+	declare local addpane is createswitcher(window, callbacks).
 
+	addpane("Node", nodepane@).
 	addpane("Science", sciencepane@).
 	addpane("System", systempane@).
 
 	window:show().
-	wait until stopped.
+	until stopped {
+		for callback in callbacks {
+			callback().
+		}
+		wait 0.
+	}
 	window:hide().
 	window:dispose().
 }

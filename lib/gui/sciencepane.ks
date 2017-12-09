@@ -1,5 +1,5 @@
 runoncepath("/lib/science").
-runoncepath("/lib/notify").
+runoncepath("/lib/utils").
 
 declare function sciencepane {
 	declare parameter box.

@@ -1,5 +1,6 @@
 declare function createswitcher {
 	declare parameter window.
+	declare parameter callbacks.
 
 	declare local switcherbar is window:addhlayout().
 	declare local switchidx is 0.
@@ -41,7 +42,10 @@ declare function createswitcher {
 		declare parameter builder is { declare parameter box. }.
 		declare local box is panes:addvbox().
 		switchpopup:addoption(name).
-		builder(box).
+		declare local callback is builder(box).
+		if callback:typename() = "UserDelegate" {
+			callbacks:add(callback).
+		}
 		updatepane().
 		return box.
 	}.
