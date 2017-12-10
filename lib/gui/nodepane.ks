@@ -4,12 +4,17 @@ runoncepath("/lib/utils").
 declare function nodepane {
 	declare parameter box.
 
-	declare execbtn is box:addbutton("Execute maneuver node").
+	declare local execbtn is box:addbutton("Execute maneuver node").
 
 	return {
 		if execbtn:takepress {
 			if not hasnode {
 				notify("No maneuver node present!").
+				return.
+			}
+
+			if ship:availablethrust <= 0 {
+				notify("No thrust available!").
 				return.
 			}
 

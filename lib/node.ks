@@ -23,7 +23,7 @@ declare function executenode {
 	}
 
 	// approximate time the burn will take in seconds
-	local lock burnduration to nextnode:deltav:mag() / acceleration().
+	local lock burnduration to nextnode:deltav:mag / acceleration().
 
 	// UT of the maneuver node
 	local lock nodeut to nextnode:eta + time:seconds.
@@ -60,10 +60,21 @@ declare function executenode {
 	{
 		kuniverse:timewarp:cancelwarp().
 
-		local lock targetacceleration to (1 - (alignerror() / 10)) * (nextnode:deltav:mag()).
-		lock throttle to clamp(targetacceleration / acceleration(), 1, precision / acceleration()).
+		local lock targetacceleration to (1 - (alignerror() / 10)) * (nextnode:deltav:mag).
 
-		until nextnode:deltav:mag() <= precision {
+		declare local getthrottle is {
+			declare local a is acceleration().
+			if a <= 0 {
+				return 0.
+			} else {
+				return clamp(targetacceleration / a, 1, precision / a).
+			}
+		}.
+		
+		lock throttle to getthrottle().
+		//lock throttle to clamp(targetacceleration / acceleration(), 1, precision / acceleration()).
+
+		until nextnode:deltav:mag <= precision {
 			if not callback("Burning, throttle " + round(throttle * 100) + "%") { stop(). return. }
 		}
 	}

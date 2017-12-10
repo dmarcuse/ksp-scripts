@@ -39,5 +39,5 @@ declare local oldpath is path().
 
 cd("0:").
 declare local installed is installdir().
-hudtext("Successfully installed " + installed + " files.", 3, 1, 15, green, true).
+hudtext("Successfully installed " + installed + " files.", 3, 1, 24, green, true).
 cd(oldpath).
