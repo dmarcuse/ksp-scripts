@@ -2,7 +2,6 @@
 
 runoncepath("/lib/utils").
 runoncepath("/lib/node").
-//runoncepath("/lib/external/lazcalc").
 
 declare function launchazimuth {
 	declare parameter tgtalt.
@@ -55,6 +54,7 @@ declare function launchtoorbit {
 		unlock steering.
 		unlock throttle.
 		set ship:control:pilotmainthrottle to 0.
+		abort on.
 		sas on.
 	}.
 
@@ -76,7 +76,7 @@ declare function launchtoorbit {
 	// apoapsis at time of gravity turn start
 	declare local turnstartap is 0.
 
-	declare local getheading is launchazimuth(tgtalt, tgtinc, ship).
+	declare local azimuth is launchazimuth(tgtalt, tgtinc, ship).
 
 	declare local getsteering is {
 		declare local p is 90.
@@ -84,7 +84,7 @@ declare function launchtoorbit {
 			set p to 90 - ((apoapsis - turnstartap) / (tgtalt - turnstartap) * 75).
 		}
 
-		return heading(getheading(), p).
+		return heading(azimuth(), p).
 	}.
 
 	lock throttle to 1.
@@ -100,23 +100,42 @@ declare function launchtoorbit {
 		if not callback("Gravity turn: Apoapsis is " + formatmeters(apoapsis)) { stop(). return. }
 	}
 
-	// create circularization node
-	declare local aptime is time:seconds + eta:apoapsis.
+	unlock throttle.
+	set ship:control:pilotmainthrottle to 0.
+
+	// circularization stuff
+	local lock aptime to time:seconds + eta:apoapsis.
 	declare local obtspd is orbitalspeed(tgtalt, ship:orbit:body).
+	local lock vdiff to obtspd - ship:velocity:orbit:mag.
+	local lock burntime to vdiff / acceleration().
 
-	// todo: improve this stuff
-	declare local progradeburn is obtspd - velocityat(ship, aptime):orbit:mag.
-	declare local normalburn is -2 * obtspd * sin((ship:orbit:inclination - tgtinc) / 2).
+	lock steering to heading(azimuth(), 0).
 
-	declare local circularizenode is node(aptime, 0, normalburn, progradeburn).
-	add circularizenode.
+	until eta:apoapsis <= burntime / 2 {
+		if not callback("Coasting " + round(eta:apoapsis - (burntime / 2)) + "s to burn start") { stop(). return. }
+	}
 
-	stop().
+	kuniverse:timewarp:cancelwarp().
 
-	executenode(0.1, true, {
-		declare parameter status.
-		return callback("Circularizing: " + status).
-	}).
+	// much of this adapted from lib/node
+
+	local lock targetacceleration to (1 - (alignerror() / 10)) * vdiff.
+
+	declare local getthrottle is {
+		declare local a is acceleration().
+
+		if a <= 0 {
+			return 0.
+		} else {
+			return clamp(targetacceleration / a, 1, 0.1 / a).
+		}
+	}.
+
+	lock throttle to getthrottle().
+
+	until vdiff <= 0.1 {
+		if not callback("Circularizing: " + formatmeters(vdiff) + "/s Δv remaining") { stop(). return. }
+	}
 
 	stop().
 }
