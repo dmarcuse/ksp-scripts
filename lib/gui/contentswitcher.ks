@@ -1,3 +1,5 @@
+@lazyglobal off.
+
 declare function createswitcher {
 	declare parameter window.
 	declare parameter callbacks.

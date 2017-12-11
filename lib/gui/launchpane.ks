@@ -1,3 +1,5 @@
+@lazyglobal off.
+
 runoncepath("/lib/launch").
 runoncepath("/lib/utils").
 

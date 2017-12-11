@@ -1,3 +1,5 @@
+@lazyglobal off.
+
 // starts the assistant GUI
 
 runoncepath("/lib/utils").

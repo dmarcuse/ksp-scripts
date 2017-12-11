@@ -1,3 +1,5 @@
+@lazyglobal off.
+
 declare parameter precision is 0.1.
 declare parameter warp is true.
 

@@ -1,3 +1,5 @@
+@lazyglobal off.
+
 declare function runallexperiments {
 	declare parameter dryrun is false.
 	declare parameter keywords is list("log", "observe", "report", "record", "collect").

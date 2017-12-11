@@ -1,3 +1,5 @@
+@lazyglobal off.
+
 // some generic utitlity function
 
 declare function notify {

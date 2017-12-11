@@ -1,3 +1,5 @@
+@lazyglobal off.
+
 runoncepath("/lib/utils").
 
 declare function executenode {

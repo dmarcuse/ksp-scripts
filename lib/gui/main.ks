@@ -1,3 +1,5 @@
+@lazyglobal off.
+
 runoncepath("/lib/utils").
 runoncepath("/lib/gui/contentswitcher").
 runoncepath("/lib/gui/sciencepane").

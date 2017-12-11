@@ -1,3 +1,5 @@
+@lazyglobal off.
+
 // installs all code from the archive, optionally compiling .ks files and copying .ksm files
 
 declare parameter keepsource is false.
@@ -8,6 +10,7 @@ declare function installdir {
 	declare local installed is 0.
 
 	cd("0:" + basepath).
+	declare local items is 0.
 	list files in items.
 
 	for item in items {

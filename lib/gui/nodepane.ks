@@ -1,3 +1,5 @@
+@lazyglobal off.
+
 runoncepath("/lib/node").
 runoncepath("/lib/utils").
 

@@ -1,3 +1,5 @@
+@lazyglobal off.
+
 declare function systempane {
 	declare parameter box.
 

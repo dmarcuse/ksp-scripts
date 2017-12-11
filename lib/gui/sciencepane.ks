@@ -1,3 +1,5 @@
+@lazyglobal off.
+
 runoncepath("/lib/science").
 runoncepath("/lib/utils").
 
