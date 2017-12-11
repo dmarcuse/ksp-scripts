@@ -15,10 +15,10 @@ declare function launchazimuth {
 
 	if abs(launchlat) > tgtinc {
 		set tgtinc to abs(launchlat).
-		notify("Inclination impossible, adjusting to " + tgtinc, 3, red).
+		notify("Inclination impossible, adjusting to " + tgtinc, 5, red).
 	} else if (180 - abs(launchlat)) < tgtinc {
 		set tgtinc to 180 - abs(launchlat).
-		notify("Inclination impossible, adjusting to " + tgtinc, 3, red).
+		notify("Inclination impossible, adjusting to " + tgtinc, 5, red).
 	}
 
 	declare local b is s:orbit:body.

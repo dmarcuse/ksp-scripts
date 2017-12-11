@@ -2,6 +2,7 @@
 
 runoncepath("/lib/launch").
 runoncepath("/lib/utils").
+runoncepath("/lib/deploy").
 
 declare function launchpane {
 	declare parameter box.
@@ -34,6 +35,8 @@ declare function launchpane {
 
 	incslider:onchange(incslider:value).
 
+	declare local deploybtn is optpane:addcheckbox("Auto-deploy panels, fairings, antennas", false).
+
 	return {
 		if launchbtn:takepress {
 			notify("Launching to orbit at " + formatmeters(tgtalt)).
@@ -43,14 +46,29 @@ declare function launchpane {
 			declare local statuslbl is statuspane:addlabel("").
 			declare local abortbtn is statuspane:addbutton("Abort launch").
 
+			declare local deployed is not deploybtn:pressed.
+
 			launchtoorbit(tgtalt, tgtinc, {
 				declare parameter status.
+				
 				set statuslbl:text to status.
+
+				if (altitude > (1.05 * body:atm:height)) and (not deployed) {
+					set deployed to true.
+
+					deployfairings().
+					deployantennas().
+					panels on.
+
+					notify("Deployed panels, fairings, and antennas").
+				}
+
 				declare local aborted is abortbtn:takepress.
 				if aborted {
 					abort on.
 					notify("Launch aborted!", 3, red).
 				}
+
 				return not aborted.
 			}).
 
