@@ -51,10 +51,10 @@ declare function launchtoorbit {
 	declare parameter statuscallback is { declare parameter status. return true. }.
 
 	declare local stop is {
-		unlock steering.
 		unlock throttle.
+		set throttle to 0.
+		unlock steering.
 		set ship:control:pilotmainthrottle to 0.
-		abort on.
 		sas on.
 	}.
 

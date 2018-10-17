@@ -6,6 +6,7 @@ runoncepath("/lib/gui/sciencepane").
 runoncepath("/lib/gui/systempane").
 runoncepath("/lib/gui/nodepane").
 runoncepath("/lib/gui/launchpane").
+runoncepath("/lib/gui/periodpane").
 
 declare function startgui {
 	declare local window is gui(300).
@@ -51,6 +52,7 @@ declare function startgui {
 
 	addpane("Node", nodepane@).
 	addpane("Launch", launchpane@).
+	addpane("Period", periodpane@).
 	addpane("Science", sciencepane@).
 	addpane("System", systempane@).
 

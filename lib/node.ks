@@ -16,6 +16,7 @@ declare function executenode {
 		kuniverse:timewarp:cancelwarp().
 		unlock steering.
 		unlock throttle.
+		set throttle to 0.
 		set ship:control:pilotmainthrottle to 0.
 		sas on.
 	}.

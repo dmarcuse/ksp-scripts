@@ -47,6 +47,33 @@ declare function formatmeters {
 	}
 }
 
+declare function formattime {
+	declare parameter seconds.
+	
+	declare local text is "".
+
+	if seconds > 21600 {
+		declare local days is floor(seconds / 21600).
+		set text to text + days + "d ".
+		set seconds to seconds - (days * 21600).
+	}
+
+	if seconds > 3600 {
+		declare local hours is floor(seconds / 3600).
+		set text to text + hours + "h ".
+		set seconds to seconds - (hours * 3600).
+	}
+
+	if seconds > 60 {
+		declare local minutes is floor(seconds / 60).
+		set text to text + minutes + "m ".
+		set seconds to seconds - (minutes * 60).
+	}
+
+	set text to text + seconds + "s".
+	return text.
+}
+
 declare function orbitalspeed {
 	declare parameter tgtalt.
 	declare parameter body is ship:orbit:body.
