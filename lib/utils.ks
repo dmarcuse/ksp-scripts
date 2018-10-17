@@ -1,6 +1,6 @@
 @lazyglobal off.
 
-// some generic utitlity function
+// some generic utility functions
 
 declare function notify {
 	declare parameter text.
@@ -10,19 +10,23 @@ declare function notify {
 	hudtext(text, timeout, 1, 24, color, true).
 }
 
+// get the ship's current acceleration
 declare function acceleration {
 	return ship:availablethrust / ship:mass.
 }
 
+// square a value
 declare function square {
 	declare parameter x.
 	return x * x.
 }
 
+// calculate the current steeringmanager total pitch/yaw error
 declare function alignerror {
 	return sqrt(square(steeringmanager:yawerror) + square(steeringmanager:pitcherror)).
 }
 
+// clamp a value to be between the given max and min values
 declare function clamp {
 	declare parameter value.
 	declare parameter maxval.
@@ -31,6 +35,7 @@ declare function clamp {
 	return max(min(value, maxval), minval).
 }
 
+// format a number of meters as human-readable text
 declare function formatmeters {
 	declare parameter meters.
 
@@ -47,6 +52,7 @@ declare function formatmeters {
 	}
 }
 
+// format a number of seconds as human-readable text
 declare function formattime {
 	declare parameter seconds.
 	
@@ -74,6 +80,7 @@ declare function formattime {
 	return text.
 }
 
+// calculate the necessary speed to maintain an orbit at the given altitude around the given body (defaults to current orbiting body)
 declare function orbitalspeed {
 	declare parameter tgtalt.
 	declare parameter body is ship:orbit:body.
