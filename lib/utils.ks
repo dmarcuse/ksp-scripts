@@ -83,6 +83,6 @@ declare function formattime {
 // calculate the necessary speed to maintain an orbit at the given altitude around the given body (defaults to current orbiting body)
 declare function orbitalspeed {
 	declare parameter tgtalt.
-	declare parameter body is ship:orbit:body.
-	return sqrt(ship:orbit:body:mu / (tgtalt + ship:orbit:body:radius)).
+	declare parameter b is ship:orbit:body.
+	return sqrt(b:mu / (tgtalt + b:radius)).
 }

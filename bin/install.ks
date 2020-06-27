@@ -8,30 +8,40 @@ declare function installdir {
 	declare parameter basepath is "/".
 
 	declare local installed is 0.
+	declare local usedspace is 0.
 
 	cd("0:" + basepath).
 	declare local items is 0.
 	list files in items.
 
 	for item in items {
-		declare local fpath is basepath + item:name.
-		if item:isfile {
-			if item:extension = "ks" {
-				set installed to installed + 1.
-				if keepsource {
-					print "Copying " + fpath.
-					copypath(fpath, "1:" + fpath).
-				} else {
-					print "Compiling " + fpath.
-					compile fpath to "1:" + fpath + "m".
+		if not item:name:startswith(".") {
+			declare local fpath is basepath + item:name.
+			if item:isfile {
+				if item:extension = "ks" {
+					print "Installing " + fpath.
+					set installed to installed + 1.
+					if keepsource {
+						copypath(fpath, "1:" + fpath).
+						set usedspace to usedspace + item:size.
+					} else {
+						declare local newpath is "1:" + fpath + "m".
+						compile fpath to "1:" + fpath + "m".
+
+						if item:size < open(newpath):size {
+							// compiled program larger than source - copy it directly
+							deletepath(newpath).
+							copypath(fpath, "1:" + fpath).
+							set usedspace to usedspace + item:size.
+						} else {
+							set usedspace to usedspace + open(newpath):size.
+						}
+					}
 				}
-			} else if item:extension = "ksm" {
-				print "Copying " + fpath.
-				set installed to installed + 1.
-				copypath(fpath, "1:" + fpath).
+			} else {
+				deletepath("1:" + fpath).
+				set installed to installed + installdir(fpath + "/").
 			}
-		} else {
-			set installed to installed + installdir(fpath + "/").
 		}
 	}
 
@@ -41,6 +51,5 @@ declare function installdir {
 declare local oldpath is path().
 
 cd("0:").
-declare local installed is installdir().
-hudtext("Successfully installed " + installed + " files.", 3, 1, 24, green, true).
+hudtext("Successfully installed " + installdir() + " files.", 3, 1, 24, green, true).
 cd(oldpath).
