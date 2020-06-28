@@ -44,6 +44,7 @@ declare function executenode {
 		}
 
 		until timetoburn <= 30 {
+			wait 0. // save power while waiting
 			if not callback("Waiting " + round(timetoburn) + "s for burn window") { stop(). return. }
 		}
 	}
