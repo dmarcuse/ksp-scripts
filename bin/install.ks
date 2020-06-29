@@ -2,6 +2,7 @@
 
 // installs all code from the archive, optionally compiling .ks files and copying .ksm files
 
+declare parameter gui is true.
 declare parameter keepsource is false.
 
 declare function installdir {
@@ -15,7 +16,7 @@ declare function installdir {
 	list files in items.
 
 	for item in items {
-		if not item:name:startswith(".") {
+		if not item:name:startswith(".") and (gui or not item:name:contains("gui")) {
 			declare local fpath is basepath + item:name.
 			if item:isfile {
 				if item:extension = "ks" {
