@@ -86,3 +86,21 @@ declare function orbitalspeed {
 	declare parameter b is ship:orbit:body.
 	return sqrt(b:mu / (tgtalt + b:radius)).
 }
+
+// get the burn duration of the next maneuver node considering the ship's dv
+declare function nodeburntime {
+	// todo: wait for deltav to stabilize?
+	declare local remaining is nextnode:deltav:mag.
+	declare local totaltime is 0.
+	declare local currentstage is ship:stagenum.
+
+	until remaining <= 0 or currentstage = 0 {
+		declare local dv is ship:stagedeltav(currentstage).
+		declare local p is min(1, remaining / dv:current).
+		set remaining to remaining - dv:current * p.
+		set totaltime to totaltime + dv:duration * p.
+		set currentstage to currentstage - 1.
+	}
+
+	return totaltime.
+}
