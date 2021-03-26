@@ -28,11 +28,12 @@ declare function startgui {
 		}.
 
 		declare local consolebtn is titlebar:addbutton(">_").
-		set consolebtn:tooltip to "Open terminal".
+		set consolebtn:tooltip to "Open terminal and exit GUI".
 		set consolebtn:onclick to {
 			if core:hasevent("open terminal") {
 				core:doevent("open terminal").
 				notify("Terminal opened").
+				set stopped to true.
 			} else {
 				notify("Cannot open terminal").
 			}
